@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { userLoginAction, userSignupAction } from "@/actions/users";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -27,18 +28,39 @@ function AuthForm({ type }: AuthFormProps) {
 
   const handleSubmit = (formData: FormData) => {
     startTransition(async () => {
-      // Simulate form submission
-      setTimeout(() => {
-        toast.success(
-          isLogin ? "Logged in successfully!" : "Signed up successfully!",
-        );
-        console.log(
-          "Form submitted:",
-          formData.get("email"),
-          formData.get("password"),
-        );
-      }, 3000);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      let errorMessage;
+      let title;
+      let description;
+
+      if (isLogin) {
+        errorMessage = (await userLoginAction(email, password)).errorMessage;
+        title = "Logged In";
+        description = "You have been successfully logged in";
+      } else {
+        errorMessage = (await userSignupAction(email, password)).errorMessage;
+        title = "Account Created";
+        description = "Your account has been successfully created, check your email for a verification link";
+      }
+
+      if (errorMessage) {
+        toast.error(errorMessage, {
+          description: "Please try again",
+        });
+        return;
+      }
+
+      toast.success(title, {
+        description,
+      });
       
+      if (isLogin) {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/login");
+      }
     });
   };
 
