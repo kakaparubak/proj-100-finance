@@ -30,6 +30,7 @@ function AuthForm({ type }: AuthFormProps) {
     startTransition(async () => {
       const email = formData.get("email") as string;
       const password = formData.get("password") as string;
+      const displayname = formData.get("display-name") as string;
 
       let errorMessage;
       let title;
@@ -40,9 +41,10 @@ function AuthForm({ type }: AuthFormProps) {
         title = "Logged In";
         description = "You have been successfully logged in";
       } else {
-        errorMessage = (await userSignupAction(email, password)).errorMessage;
+        errorMessage = (await userSignupAction(displayname, email, password)).errorMessage;
         title = "Account Created";
-        description = "Your account has been successfully created, check your email for a verification link";
+        description =
+          "Your account has been successfully created, check your email for a verification link";
       }
 
       if (errorMessage) {
@@ -55,11 +57,11 @@ function AuthForm({ type }: AuthFormProps) {
       toast.success(title, {
         description,
       });
-      
+
       if (isLogin) {
         router.replace("/dashboard");
       } else {
-        router.replace("/login");
+        router.push("/");
       }
     });
   };
@@ -79,7 +81,20 @@ function AuthForm({ type }: AuthFormProps) {
         </CardHeader>
         <CardContent>
           <form action={handleSubmit}>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+            {!isLogin && (
+              <div className="grid gap-2">
+                <Label htmlFor="display-name">Display Name</Label>
+                <Input
+                  id="display-name"
+                  type="text"
+                  placeholder="Username"
+                  disabled={isPending}
+                  name="display-name"
+                  required
+                  className="font-mono"
+                />
+              </div>)}
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -93,9 +108,7 @@ function AuthForm({ type }: AuthFormProps) {
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"

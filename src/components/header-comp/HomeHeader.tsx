@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
-import ModeToggle from "./ui/mode-toggle";
 import { getUser } from "@/auth/server";
-import LogOutButton from "./LogOutButton";
+import { Button } from "../ui/button";
+import { ModeToggle } from "../ui/mode-toggle";
+import { LogOutButton } from "../LogOutButton";
 
-async function Header() {
-  const user = await getUser();
+async function HomeHeader() {
+  const currentUser = await getUser();
 
   return (
     <>
-      {user ? (
+      {currentUser ? (
         <header className="bg-card border-accent fixed flex w-screen items-center justify-between border-b-[1px] px-4 py-3 font-sans">
           <h1 className="pl-2 font-mono text-3xl font-bold tracking-tight text-green-400">
             <Link href="/">
@@ -43,4 +43,4 @@ async function Header() {
   );
 }
 
-export default Header;
+export default HomeHeader;

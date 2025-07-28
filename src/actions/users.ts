@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/auth/server";
+import { prisma } from "@/db/prisma";
 import { handleError } from "@/lib/utils";
 
 export const userLoginAction = async (email: string, password: string) => {
@@ -36,12 +37,12 @@ export const userLogoutAction = async () => {
   }
 };
 
-export const userSignupAction = async (email: string, password: string) => {
+export const userSignupAction = async (displayname:string, email: string, password: string) => {
   try {
     const { auth } = await createClient();
     const { data, error } = await auth.signUp({
       email,
-      password,
+      password
     });
 
     if (error) {
@@ -53,7 +54,13 @@ export const userSignupAction = async (email: string, password: string) => {
       throw new Error("Error signing up. Please try again.");
     }
 
-    // Add user to the database
+    await prisma.user.create({
+      data: {
+        id: userId,
+        email: email,
+        name: displayname
+      }
+    })
 
     return { errorMessage: null };
   } catch (error) {
