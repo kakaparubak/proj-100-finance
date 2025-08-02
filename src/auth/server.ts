@@ -1,3 +1,4 @@
+import { prisma } from '@/db/prisma'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -36,4 +37,22 @@ export async function getUser() {
   }
 
   return userObject.data.user;
+}
+
+export async function getUserInDB() {
+  const client = await createClient();
+  const userObject = await client.auth.getUser();
+
+  if (userObject.error) {
+    console.error("Error fetching user");
+    return null;
+  }
+
+  const user = prisma.user.findUnique({
+    where: {
+      id: userObject.data.user.id
+    }
+  })
+
+  return user;
 }

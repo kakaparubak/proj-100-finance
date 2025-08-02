@@ -1,31 +1,20 @@
-import React from "react";
+"use client";
+import React, { useContext } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUser } from "@/auth/server";
-import { prisma } from "@/db/prisma";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ModeToggleDropdown } from "../ui/mode-toggle";
 import { LogOutDropdownItem } from "../LogOutButton";
+import { UserContext } from "../providers/UserProvider";
 
-async function HeaderDropdown() {
-  const currentUser = await getUser();
-  const userInDB = await prisma.user.findFirst({
-    where: {
-      id: currentUser?.id,
-    },
-  });
+function HeaderDropdown() {
+  const userInDB = useContext(UserContext);
   const userInitial = userInDB?.name?.slice(0, 1).toLocaleUpperCase();
 
   return (

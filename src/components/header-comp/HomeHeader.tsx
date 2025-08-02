@@ -1,15 +1,17 @@
+"use client";
 import Link from "next/link";
-import { getUser } from "@/auth/server";
 import { Button } from "../ui/button";
 import { ModeToggle } from "../ui/mode-toggle";
-import { LogOutButton } from "../LogOutButton";
+import DashboardButton from "./DashboardButton";
+import { useContext } from "react";
+import { UserContext } from "../providers/UserProvider";
 
-async function HomeHeader() {
-  const currentUser = await getUser();
+function HomeHeader() {
+  const userInDB = useContext(UserContext);
 
   return (
     <>
-      {currentUser ? (
+      {userInDB ? (
         <header className="bg-card border-accent fixed flex w-screen items-center justify-between border-b-[1px] px-4 py-3 font-sans">
           <h1 className="pl-2 font-mono text-3xl font-bold tracking-tight text-green-400">
             <Link href="/">
@@ -17,7 +19,7 @@ async function HomeHeader() {
             </Link>
           </h1>
           <div className="flex items-center gap-2">
-            <LogOutButton />
+            <DashboardButton />
             <ModeToggle />
           </div>
         </header>

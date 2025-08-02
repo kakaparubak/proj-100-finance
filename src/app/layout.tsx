@@ -3,7 +3,10 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "@/styles/globals.css";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import Header from "@/components/HeaderComponent";
+import UserProvider from "@/components/providers/UserProvider";
+import { getUser } from "@/auth/server";
+import { prisma } from "@/db/prisma";
+import Header from "@/components/Header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,11 +22,25 @@ export const metadata: Metadata = {
   title: "100finance",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  let userInDB
+
+  try {
+    const user = await getUser();
+    userInDB = await prisma.user.findUnique({
+    where: {
+      id: user?.id
+    }
+  })
+  } catch {
+    userInDB = null;
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -35,9 +52,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <div className="pt-[60px]">{children}</div>
-          <Toaster richColors />
+          <UserProvider user={userInDB}>
+            <Header />
+            <div className="pt-[60px]">{children}</div>
+            <Toaster richColors />
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

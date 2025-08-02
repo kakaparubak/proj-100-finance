@@ -1,7 +1,8 @@
+"use client";
 import Link from "next/link";
 import React from "react";
-import HeaderDropdown from "./HeaderDropdown";
 import { ModeToggle } from "../ui/mode-toggle";
+import HeaderDropdown from "./HeaderDropdown";
 
 function DashboardHeader() {
   return (

@@ -1,4 +1,3 @@
-import Header from "@/components/HeaderComponent";
 import React from "react";
 
 function HomePage() {
