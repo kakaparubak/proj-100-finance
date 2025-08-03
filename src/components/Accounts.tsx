@@ -11,6 +11,8 @@ import { Account } from "@prisma/client";
 import { useEffect, useState } from "react";
 import NewAccountButton from "./NewAccountButton";
 import { User } from "@supabase/supabase-js";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface AccountsProp {
   accounts: Account[];
@@ -33,7 +35,7 @@ function Accounts({ accounts, user }: AccountsProp) {
   return (
     <Card className="bg-background-lighter rounded-xl">
       <CardHeader className="flex w-full items-center justify-between gap-2">
-        <CardTitle className="font-mono text-2xl pl-2">Accounts</CardTitle>
+        <CardTitle className="pl-2 font-mono text-2xl">Accounts</CardTitle>
         <CardAction className="">
           <NewAccountButton user={user} setLocalAccounts={setLocalAccounts} />
         </CardAction>
@@ -41,23 +43,25 @@ function Accounts({ accounts, user }: AccountsProp) {
       <CardContent className="flex flex-col gap-2">
         {localAccounts.map((current) => {
           return (
-            <div
-              key={current.id}
-              className="bg-muted flex items-center justify-between rounded-lg px-3 py-2"
-            >
-              <div>
-                <h3 className="text-foreground font-sans text-lg">
-                  {current.name}
-                </h3>
-                <p className="text-muted-foreground font-sans">
-                  Rp. {current.amount}
-                </p>
-              </div>
-              <DeleteAccountButton
-                accountId={current.id}
-                deleteNoteLocally={handleDeleteNoteLocally}
-              />
-            </div>
+              <Link
+                key={current.id}
+                href={`/dashboard/account/${current.id}`}
+              >
+                <div className="bg-muted/70 flex items-center justify-between rounded-lg px-3 py-2 w-full hover:bg-muted">
+                  <div className="w-full">
+                    <h3 className="text-foreground font-sans text-lg">
+                      {current.name}
+                    </h3>
+                    <p className="text-muted-foreground font-sans">
+                      Rp. {current.amount}
+                    </p>
+                  </div>
+                  <DeleteAccountButton
+                    accountId={current.id}
+                    deleteNoteLocally={handleDeleteNoteLocally}
+                  />
+                </div>
+              </Link>
           );
         })}
       </CardContent>

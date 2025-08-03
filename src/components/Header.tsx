@@ -9,7 +9,7 @@ function Header() {
   const [isDashboard, setIsDashboard] = useState(false);
 
   useEffect(() => {
-    if (pathname === "/dashboard") {
+    if (pathname.includes("/dashboard")) {
       setIsDashboard(true);
     } else {
       setIsDashboard(false);

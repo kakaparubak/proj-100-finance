@@ -32,8 +32,10 @@ model Transaction {
   id      String  @id @default(uuid())
   name    String
   amount  Int
+  isIncome Boolean
   owner   User    @relation(fields: [ownerId], references: [id])
   ownerId String
   account Account @relation(fields: [accountId], references: [id])
   accountId String
+  createdAt DateTime @default(now())
 }
