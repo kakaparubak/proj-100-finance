@@ -5,14 +5,16 @@ import { toast } from "sonner";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface DeleteAccountButtonProps {
   accountId: string,
-  deleteNoteLocally: (accountId: string) => void
+  children: React.ReactNode
 }
 
-function DeleteAccountButton({accountId, deleteNoteLocally}: DeleteAccountButtonProps) {
+function DeleteAccountButton({accountId, children}: DeleteAccountButtonProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -27,17 +29,19 @@ function DeleteAccountButton({accountId, deleteNoteLocally}: DeleteAccountButton
         return;
       }
 
-      deleteNoteLocally(accountId);
+      router.push("/dashboard");
 
       toast.success("Account deleted");
       setIsDialogOpen(false);
+
+
     })
   }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant={"destructive"}><Trash2 /></Button>
+        {children}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

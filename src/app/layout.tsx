@@ -11,11 +11,15 @@ import Header from "@/components/Header";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: 'swap', 
+  adjustFontFallback: false
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: 'swap', 
+  adjustFontFallback: false
 });
 
 export const metadata: Metadata = {

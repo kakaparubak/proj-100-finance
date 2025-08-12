@@ -14,6 +14,7 @@ export const createAccountAction = async (accountId: string, accountName: string
         id: accountId,
         name: accountName,
         amount: Number(accountAmount),
+        strAmount: new Intl.NumberFormat().format(Number(accountAmount)),
         ownerId: user?.id
       }
     });
