@@ -56,10 +56,6 @@ function Accounts({ accounts, user }: AccountsProp) {
                       Rp. {current.amount}
                     </p>
                   </div>
-                  <DeleteAccountButton
-                    accountId={current.id}
-                    deleteNoteLocally={handleDeleteNoteLocally}
-                  />
                 </div>
               </Link>
           );

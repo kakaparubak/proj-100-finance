@@ -2,7 +2,7 @@ import { getUser } from "@/auth/server";
 import { Card } from "@/components/ui/card";
 import { LuSquarePlus, LuTrash2 } from "react-icons/lu";
 import { prisma } from "@/db/prisma";
-import React from "react";
+import React, { useState } from "react";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 import NewTransactionButton from "@/components/NewTransactionButton";
 
@@ -64,7 +64,7 @@ async function DynamicAccountPage({
           <p
             className={`${transactions[0]?.isIncome ? "text-green-400" : "text-red-400"} text-3xl font-bold`}
           >
-            Rp{transactions[0]?.strAmount}
+            {transactions[0] ? `Rp${transactions[0]?.strAmount}` : "No transactions yet"}
           </p>
           <div className="flex items-center justify-center gap-2">
             <p className="m-0 p-0 font-mono text-lg/[1] font-medium">
@@ -76,6 +76,9 @@ async function DynamicAccountPage({
                 : ""}
             </p>
           </div>
+        </Card>
+        <Card className="row-start-1 row-end-4 col-start-3">
+
         </Card>
       </div>
     </div>

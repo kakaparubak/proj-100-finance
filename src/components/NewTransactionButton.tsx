@@ -18,14 +18,19 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { User } from "@supabase/supabase-js";
 import { createTransactionAction } from "@/actions/transaction";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 interface NewTransactionButtonProps {
-  user: User | null,
+  user: User | null;
   accountId: string | null;
   children: React.ReactNode;
 }
 
-function NewTransactionButton({ user, accountId, children }: NewTransactionButtonProps) {
+function NewTransactionButton({
+  user,
+  accountId,
+  children,
+}: NewTransactionButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -40,16 +45,18 @@ function NewTransactionButton({ user, accountId, children }: NewTransactionButto
       const transactionName = formData.get("name") as string;
       const transactionAmount = formData.get("amount") as string;
       const transactionId = uuidv4();
-      const transactionIsIncome = formData.get("isIncome") as string == "Income";
+      const transactionIsIncome =
+        (formData.get("isIncome") as string) == "income";
+      console.log(formData.get("isIncome") as string);
 
-      const {errorMessage, currentTransactions} = await createTransactionAction({
-        accountId,
-        transactionName,
-        transactionAmount,
-        transactionId,
-        transactionIsIncome,
-      }
-      );
+      const { errorMessage, currentTransactions } =
+        await createTransactionAction({
+          accountId,
+          transactionName,
+          transactionAmount,
+          transactionId,
+          transactionIsIncome,
+        });
 
       if (errorMessage) {
         toast.error("Failed creating transaction, please try again", {
@@ -65,12 +72,12 @@ function NewTransactionButton({ user, accountId, children }: NewTransactionButto
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="font-sans sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-mono text-2xl font-bold">Create new transaction</DialogTitle>
+          <DialogTitle className="font-mono text-2xl font-bold">
+            Create new transaction
+          </DialogTitle>
           <DialogDescription>
             Create a new transaction for this account
           </DialogDescription>
@@ -101,14 +108,16 @@ function NewTransactionButton({ user, accountId, children }: NewTransactionButto
             </div>
             <div className="grid gap-3">
               <Label htmlFor="isIncome">Transaction Type</Label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                required
-                placeholder="Account name"
-                className="font-mono"
-              />
+              <RadioGroup defaultValue="income" name="isIncome" className="pt-1 flex gap-6">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="income" id="r1" />
+                  <Label htmlFor="r1" className="text-muted-foreground">Income</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="expense" id="r2" />
+                  <Label htmlFor="r2" className="text-muted-foreground">Expense</Label>
+                </div>
+              </RadioGroup>
             </div>
           </div>
           <div className="mt-4 flex items-center justify-end gap-3">

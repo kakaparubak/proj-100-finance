@@ -25,6 +25,7 @@ interface NewAccountButtonProps {
     name: string;
     id: string;
     amount: number;
+    strAmount: string;
     ownerId: string;
     createdAt: Date;
     updatedAt: Date;
